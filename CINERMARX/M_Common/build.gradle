@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group = 'CINEMARX'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Sin dependencias, este es el módulo base
+}
+
+java {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+}

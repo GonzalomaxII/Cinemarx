@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boleto de Cine - Cinemarx</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff;
+            padding: 0;
+        }
+        
+        .ticket-container {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            margin: 0 auto;
+            padding: 20mm;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #000;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+        }
+        
+        .date-number {
+            text-align: right;
+            font-size: 11px;
+        }
+        
+        .ticket-number {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .client-info {
+            font-size: 11px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .qr-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .qr-code {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 10px;
+            border: 1px solid #000;
+        }
+        
+        .booking-code {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 0 5px;
+        }
+        
+        .booking-label {
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .booking-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 5px 0 20px;
+        }
+        
+        .venue-info {
+            font-size: 11px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .venue-info strong {
+            font-weight: bold;
+        }
+        
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 11px;
+        }
+        
+        .items-table th {
+            text-align: left;
+            padding: 8px 5px;
+            border-bottom: 1px solid #000;
+            font-weight: bold;
+        }
+        
+        .items-table td {
+            padding: 8px 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .items-table .price-col {
+            text-align: right;
+        }
+        
+        .totals {
+            text-align: right;
+            font-size: 11px;
+            margin-top: 10px;
+        }
+        
+        .totals div {
+            margin: 5px 0;
+        }
+        
+        .totals .total-final {
+            font-weight: bold;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        .warning {
+            font-size: 10px;
+            font-weight: bold;
+            margin: 25px 0 10px;
+        }
+        
+        .terms {
+            font-size: 8px;
+            line-height: 1.4;
+            color: #333;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 20mm;
+            left: 20mm;
+            right: 20mm;
+            font-size: 8px;
+            color: #666;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        @media print {
+            body {
+                padding: 0;
+            }
+            .ticket-container {
+                padding: 15mm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket-container">
+        <div class="header">
+            <div class="logo" id="cinema-logo">CINEMARX</div>
+            <div class="date-number" id="header-date">${header-date}<br>${cinema-name}</div>
+        </div>
+        
+        <div class="ticket-number" id="ticket-id">Nº ${ticket-id}</div>
+        
+        <div class="client-info">
+            <div><strong>Nombre:</strong> <span id="client-name">${client-name}</span></div>
+            <div><strong>DNI:</strong> <span id="client-dni">${client-dni}</span></div>
+            <div><strong>Email:</strong> <span id="client-email">${client-email}</span></div>
+        </div>
+        
+        <div class="qr-section">
+            <canvas id="qr-code" class="qr-code"></canvas>
+            <div class="booking-code" id="qr-text">${qr-text}</div>
+            <div class="booking-label">Booking Code</div>
+            <div class="booking-number" id="booking-number">${booking-number}</div>
+            <div class="booking-label">Booking Number</div>
+        </div>
+        
+        <div class="venue-info">
+            <div><strong>${movie-title}</strong> <span id="movie-title">(${movie-extra})</span></div>
+            <div><strong>Fecha:</strong> <span id="show-date">${show-date}</span></div>
+            <div><strong>Sala:</strong> <span id="room">${room}</span></div>
+            <div><strong>Censura:</strong> <span id="rating">${rating}</span></div>
+            <div><strong>Asientos:</strong> <span id="seats">${seats}</span></div>
+            <div><strong>Cine:</strong> <span id="cinema-name">${cinema-name}</span></div>
+        </div>
+        
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>Qty</th>
+                    <th>Tipo</th>
+                    <th class="price-col">Precio</th>
+                </tr>
+            </thead>
+            <tbody id="items-body">
+                <tr>
+                    <td>${item-qty}</td>
+                    <td>${item-type}</td>
+                    <td class="price-col">${item-price}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="totals">
+            <div>Comisión online: <strong>${online-commission}</strong></div>
+            <div class="total-final">Total: <strong id="total-amount">${total-amount}</strong></div>
+        </div>
+        
+        <div class="warning">
+            *Evita filas. Presenta tu ticket directo en el podio para retirar tus entradas.
+        </div>
+        
+        <div class="terms">
+            Los valores mostrados en pantalla y los cobrados en su tarjeta de crédito o débito pueden no ser idénticos debido a la conversión cambiaria 
+            realizada por su entidad financiera. Conserva tu comprobante de pago. Si no has recibido tus entradas por e-mail, contáctanos al 
+            contacto @cinemarx.com - anexo/celular: Las entradas adquiridas o canjeadas son personales e intransferibles. No se harán devoluciones 
+            ni cambios, en ningún caso. Está prohibida la copia o el traspaso de la entrada. La función puede suspenderse, cambiarse o cancelarse 
+            por razones de fuerza mayor sin previo aviso. Una vez iniciada la función, la boletería no asume responsabilidad si llega tarde. Se 
+            recomienda llegar con un mínimo de 15 minutos de anticipación. Ingreso permitido solo con boleto válido correspondiente al evento. 
+            No está permitido el ingreso con comida ni bebida que no sea de las concesiones de los cines, pudiendo solicitar su revisión en cualquier 
+            momento. Tu entrada solo es válida para el día y hora de su compra/canje y podrá ser utilizada hasta la fecha de su vencimiento o 
+            caducidad. Las imágenes publicitarias son de carácter referencial. Los menores de edad, cuya edad no sea adecuada a la edad de la función en 
+            cartelera no ingresarán sin la compañía de un adulto. Está prohibido fumar dentro de los ambientes del cine y es motivo de retiro 
+            inmediato del local. El personal del cine tiene prohibido recibir propinas. Quejas y/o sugerencias pueden ser presentadas en 
+            nuestras oficinas centrales o enviadas.
+        </div>
+        
+        <div class="footer">
+            http://cinemarx.com.ar/commerce-api/queue-receiver?ticketID=${ticket-id-footer}
+        </div>
+    </div>
+    
+    <script>
+        // The script part is not needed for the PDF generation
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+description = 'M4'
+
+application {
+    mainClass = 'CINEMARX.M4.HistorialComprasExample'
+    applicationDefaultJvmArgs = [
+        "--enable-native-access=javafx.graphics,javafx.media,javafx.web",
+        "--add-opens=javafx.web/com.sun.webkit=ALL-UNNAMED"
+    ]
+}
+
+repositories {
+    mavenCentral()
+}
+
+javafx {
+    version = "21" // Cambiado a versi├│n 21 para consistencia
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.media', 'javafx.web' ] // Agregado javafx.web
+}
+
+dependencies {
+    implementation project(':M_Common')
+    implementation project(':M5')
+    // https://mvnrepository.com/artifact/com.google.zxing/core
+    implementation 'com.google.zxing:core:3.5.3'
+    // https://mvnrepository.com/artifact/com.google.zxing/javase
+    implementation 'com.google.zxing:javase:3.5.3'
+    implementation files('libs/mariadb-java-client-3.5.6.jar')
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
+    implementation 'jakarta.activation:jakarta.activation-api:2.0.1'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
